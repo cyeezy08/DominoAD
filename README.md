@@ -1,36 +1,78 @@
-# AD Analyzer
+# DominoAD
 
-Active Directory attack path collector and analyzer.  
-Inspired by BloodHound — built from scratch to understand the internals.
+<p align="center">
+  <b>Active Directory attack path collector and analyzer</b><br>
+  Built from scratch to understand how AD abuse paths actually work.
+</p>
 
----
-
-## What it does
-
-**Phase 1 — Collect**
-- LDAP enumeration: users, groups, computers, OUs, GPOs, memberships
-- SMB/RPC enumeration: active sessions, local admin relationships
-- Flags: kerberoastable users, ASREPRoastable users, admin counts
-
-**Phase 2 — Graph**
-- Converts collected data into a directed graph
-- Nodes: User | Group | Computer | GPO | OU
-- Edges: MemberOf | AdminTo | HasSession
-
-**Phase 3 — Analyze**
-- BFS-based attack path engine
-- Queries: paths to Domain Admins, blast radius, chokepoints
-- Findings report with severity ratings
+<p align="center">
+  <img src="https://img.shields.io/badge/status-active-success.svg">
+  <img src="https://img.shields.io/badge/python-3.9+-blue.svg">
+  <img src="https://img.shields.io/badge/license-MIT-lightgrey.svg">
+</p>
 
 ---
 
-## Setup
+## Overview
+
+DominoAD collects data from an Active Directory environment, models it as a graph, and analyzes it to uncover privilege escalation paths.
+
+The goal is simple:
+- No black box logic
+- Fully traceable attack paths
+- Clean, readable output
+
+---
+
+## Features
+
+### Collection
+- LDAP enumeration:
+  - Users, groups, computers
+  - OUs and GPOs
+  - Group memberships
+- SMB/RPC enumeration:
+  - Active sessions
+  - Local admin relationships
+- Flags:
+  - Kerberoastable accounts
+  - AS-REP roastable accounts
+  - AdminCount users
+
+---
+
+### Graph Engine
+- Directed graph model
+- Node types:
+  - User
+  - Group
+  - Computer
+  - GPO
+  - OU
+- Edge types:
+  - MemberOf
+  - AdminTo
+  - HasSession
+
+---
+
+### Analysis Engine
+- BFS-based attack path discovery
+- Built-in queries:
+  - Paths to Domain Admins
+  - Blast radius
+  - Chokepoints
+- Severity-based reporting
+
+---
+
+## Installation
 
 ```bash
 pip install ldap3 impacket
 ```
 
----
+
 
 ## Usage
 
