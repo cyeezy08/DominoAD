@@ -1,5 +1,6 @@
-# DominoAD
-
+# DominoAD - Single Release v1.0
+## Disclamer - I haven't tested this on a real windows 10/11 Active Directory but should work just fine 
+## Disclamer2 - Only tested on TryHackMe AD labs & GOAD
 <p align="center">
   <b>Active Directory attack path collector and analyzer</b><br>
   Built from scratch to understand how AD abuse paths actually work.
@@ -17,10 +18,11 @@
 
 DominoAD collects data from an Active Directory environment, models it as a graph, and analyzes it to uncover privilege escalation paths.
 
-The goal is simple:
+My technical goal is simple:
 - No black box logic
 - Fully traceable attack paths
-- Clean, readable output
+- Clean, readable output cuz other stuff confuse beginners
+- Hopefully lets you understand and covers most of whats going on in your AD
 
 ---
 
@@ -184,11 +186,14 @@ FINDINGS
 
 ---
 
-## Testing
+## Testing grounds
 
 Tested against:
 - **TryHackMe**: Attacktive Directory, Throwback
 - **GOAD** (Game of Active Directory) lab
+
+# Where I haven't tested
+- **Actual Real Windows AD Paths**
 
 ---
 
@@ -196,3 +201,6 @@ Tested against:
 
 This tool is for authorized security testing and research only.  
 Only run against environments you own or have explicit written permission to test.
+
+## Shoutout
+[@Cannatag](https://github.com/cannatag) - **(For making the creation of this repo way easier lol)**
