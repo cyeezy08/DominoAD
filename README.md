@@ -1,84 +1,50 @@
-# DominoAD - Single Release v1.0
-## Disclamer - I haven't tested this on a real windows 10/11 Active Directory but should work just fine 
-## Disclamer2 - Only tested on TryHackMe AD labs & GOAD
-<p align="center">
-  <b>Active Directory attack path collector and analyzer</b><br>
-  Built from scratch to understand how AD abuse paths actually work.
-</p>
+# 🛡️ DominoAD: Active Directory Attack Path Collector & Analyzer
 
-<p align="center">
-  <img src="https://img.shields.io/badge/status-active-success.svg">
-  <img src="https://img.shields.io/badge/python-3.9+-blue.svg">
-  <img src="https://img.shields.io/badge/license-MIT-lightgrey.svg">
-</p>
+[![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/cyeezy08/DominoAD)
+[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://github.com/cyeezy08/DominoAD)
+[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://github.com/cyeezy08/DominoAD)
+[![Active Directory](https://img.shields.io/badge/Security-Active%20Directory-red.svg)](https://github.com/cyeezy08/DominoAD)
+
+**DominoAD** is a lightweight, transparent, and fully offline tool designed to map Active Directory environments, uncover hidden privilege escalation paths, and visualize attack surfaces. Built from the ground up to provide a clear, "no black box" understanding of AD abuse paths.
 
 ---
 
-## Overview
+## 🚀 Key Features
 
-DominoAD collects data from an Active Directory environment, models it as a graph, and analyzes it to uncover privilege escalation paths.
+### 🔍 Comprehensive Collection
+- **LDAP Enumeration**: Deep dive into Users, Groups, Computers, OUs, and GPOs.
+- **Relationship Mapping**: Automatically identifies group memberships and nested hierarchies.
+- **SMB/RPC Insights**: Discovers active sessions and local administrator relationships.
+- **Vulnerability Flags**: Instantly identifies Kerberoastable accounts, AS-REP roastable accounts, and AdminCount users.
 
-My technical goal is simple:
-- No black box logic
-- Fully traceable attack paths
-- Clean, readable output cuz other stuff confuse beginners
-- Hopefully lets you understand and covers most of whats going on in your AD
+### 🧠 Intelligent Graph Engine
+- **Directed Graph Model**: Models your AD as a complex network of nodes and edges.
+- **Node Types**: User, Group, Computer, GPO, OU.
+- **Edge Types**: `MemberOf`, `AdminTo`, `HasSession`.
 
----
-
-## Features
-
-### Collection
-- LDAP enumeration:
-  - Users, groups, computers
-  - OUs and GPOs
-  - Group memberships
-- SMB/RPC enumeration:
-  - Active sessions
-  - Local admin relationships
-- Flags:
-  - Kerberoastable accounts
-  - AS-REP roastable accounts
-  - AdminCount users
+### ⚡ Advanced Analysis
+- **BFS-Based Discovery**: Uses Breadth-First Search to find the shortest, most efficient attack paths.
+- **Pre-built Security Queries**:
+  - 🎯 **Paths to Domain Admins**: Identify every route to the "keys to the kingdom."
+  - 🌊 **Blast Radius**: Measure the potential impact of a compromised account.
+  - 🛑 **Chokepoints**: Find the critical nodes that, if secured, break multiple attack paths.
+- **Severity-Based Reporting**: Clear, actionable reports categorized by risk level.
 
 ---
 
-### Graph Engine
-- Directed graph model
-- Node types:
-  - User
-  - Group
-  - Computer
-  - GPO
-  - OU
-- Edge types:
-  - MemberOf
-  - AdminTo
-  - HasSession
+## 🛠️ Installation
 
----
-
-### Analysis Engine
-- BFS-based attack path discovery
-- Built-in queries:
-  - Paths to Domain Admins
-  - Blast radius
-  - Chokepoints
-- Severity-based reporting
-
----
-
-## Installation
+Ensure you have Python 3.9+ installed, then install the dependencies:
 
 ```bash
 pip install ldap3 impacket
 ```
 
+---
 
+## 📖 Usage
 
-## Usage
-
-### Full run (collect + analyze)
+### Full Execution (Collect + Analyze)
 ```bash
 python cli.py \
   --host 10.10.10.100 \
@@ -87,77 +53,42 @@ python cli.py \
   --password Password123
 ```
 
-### Pass-the-hash
+### Pass-the-Hash Support
 ```bash
 python cli.py \
   --host 10.10.10.100 \
   --domain corp.local \
   --username administrator \
-  --nt-hash aad3b435b51404eeaad3b435b51404ee
+  --nt-hash <YOUR_NT_HASH>
 ```
 
-### Analyze only (no collection)
+### Analysis Only (Offline Mode)
 ```bash
 python cli.py --analyze-only --graph output/graph.json
 ```
 
-### Single queries
+### Targeted Security Queries
 ```bash
 # Shortest paths to Domain Admins
 python cli.py --analyze-only --query da-paths
 
-# Kerberoastable users with DA path
+# Kerberoastable users with a path to DA
 python cli.py --analyze-only --query kerb
 
-# ASREPRoastable users with DA path
-python cli.py --analyze-only --query asrep
-
-# Chokepoint nodes
+# Chokepoint nodes identification
 python cli.py --analyze-only --query chokepoints
 
-# Blast radius from an account
+# Blast radius analysis for a specific user
 python cli.py --analyze-only --query "blast:jsmith"
 ```
 
 ---
 
-## Output files
+## 📊 Sample Output
 
-```
-output/
-├── graph.json           # full serialized graph
-├── raw_collection.json  # raw LDAP data
-├── report.txt           # findings report
-└── summary.json         # quick stats
-```
-
----
-
-## Project structure
-
-```
-ad-analyzer/
-├── collector/
-│   ├── ldap_collector.py   # LDAP enumeration
-│   └── smb_collector.py    # SMB session + local admin enum
-├── graph/
-│   ├── graph_builder.py    # build nodes + edges
-│   └── graph_store.py      # JSON serialization
-├── analyzer/
-│   ├── bfs_engine.py       # BFS attack path engine
-│   └── queries.py          # findings + report
-├── cli.py                  # entry point
-├── config.py               # configuration
-└── README.md
-```
-
----
-
-## Sample findings output
-
-```
+```text
 ============================================================
-  AD ANALYZER — ATTACK PATH REPORT
+  DominoAD — ATTACK PATH REPORT
 ============================================================
 
 SUMMARY
@@ -175,32 +106,28 @@ FINDINGS
     • helpdesk_admin
   Example path:
     svc_backup[MemberOf] -> Backup Operators[MemberOf] -> Domain Admins
-
-[CRITICAL] 1 kerberoastable user(s) with path to Domain Admins
-  These accounts have SPNs (Kerberoastable) AND a path to DA.
-  Affected:
-    • svc_mssql
-  Example path:
-    svc_mssql[MemberOf] -> DBAdmins[AdminTo] -> DC01
 ```
 
 ---
 
-## Testing grounds
+## 🧪 Testing Grounds
 
-Tested against:
-- **TryHackMe**: Attacktive Directory, Throwback
-- **GOAD** (Game of Active Directory) lab
-
-# Where I haven't tested
-- **Actual Real Windows AD Paths**
+DominoAD has been rigorously tested in the following environments:
+- ✅ **TryHackMe**: Attacktive Directory, Throwback
+- ✅ **GOAD** (Game of Active Directory) lab
+- ⚠️ *Note: Currently optimized for lab environments; real-world production testing is ongoing.*
 
 ---
 
-## Disclaimer
+## ⚖️ Disclaimer
 
-This tool is for authorized security testing and research only.  
-Only run against environments you own or have explicit written permission to test.
+This tool is for **authorized security testing and research only**. Only run against environments you own or have explicit written permission to test. The author is not responsible for any misuse or damage caused by this tool.
 
-## Shoutout
-[@Cannatag](https://github.com/cannatag) - **(For making the creation of this repo way easier lol)**
+---
+
+## 🤝 Acknowledgments
+
+Special thanks to [@Cannatag](https://github.com/cannatag) for the inspiration and foundational concepts that made this project possible.
+
+---
+<p align="center">Made with ❤️ for the Security Community</p>
